@@ -1,7 +1,8 @@
 from collections import UserDict
 from datetime import date
 import re
-
+import json
+import pickle
 
 class Field:
     def __init__(self, value):
@@ -166,6 +167,13 @@ class AddressBook(UserDict):
         for record_j in self.data.values():
             adr_book_dict.update(record_j.to_dict_record())
         return adr_book_dict
+    
+    def from_dict_after_file(self, data_json: dict) -> None:
+       
+        for key, value in data_json.items():
+            self.add_record(Record(name=key, phones=value['phones'], birthday=value['birthday']))
+    
+  
 
 
 if __name__ == "__main__":
@@ -203,16 +211,31 @@ if __name__ == "__main__":
     ab.add_record(rec_4)
     ab.add_record(rec_5)
 
-    print(rec_1.to_dict_record())
+    # print(rec_1.to_dict_record())
 
     # for page in ab.paginate(2):
     #     input()
     #     a = " ".join(map(str, page))
     #     print(a, end="\n")
 
-    for item in ab.find_contact("bo"):
-        print(item)
+    # for item in ab.find_contact("bo"):
+    #     print(item)
     
-    di = ab.to_dict_adrbook()
-    print(di)
+    # di = ab.to_dict_adrbook()
+    # print(di)
+
+    s = pickle.dumps(ab.to_dict_adrbook())
+    print(s)
+
+
+    restored_a = pickle.loads(s)
+    print(restored_a)
+
+    with open('data_user.json', 'w', encoding='utf-8') as f:
+        json.dump(ab.to_dict_adrbook(), f, ensure_ascii=False, indent=4)
+
+
+    with open('data_user.json', 'r', encoding='utf-8') as f:
+        restore_data = json.load(f)
+        print(restore_data)
 
