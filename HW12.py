@@ -88,7 +88,7 @@ class Record:
             index = self.phones.index(old_phone)
             self.phones[index] = new_phone
         except ValueError:
-            raise ValueError(f"old phone: {phone} not exists")
+            raise ValueError(f"old phone: {old_phone} not exists")
 
     def days_to_birthday(self):
         current_date = date.today()
